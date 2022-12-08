@@ -45,7 +45,7 @@ namespace Day07
                     var child = new TreeItem(item[1])
                     {
                         Name = item[1],
-                        Size = item[0].Equals("dir") ? -1 : int.Parse(item[0]),
+                        Size = item[0].Equals("dir") ? 0 : int.Parse(item[0]),
                         Parent = currentDirectory,
                         Level = currentDirectory.Level + 1
                     };
@@ -59,7 +59,18 @@ namespace Day07
                 currentDirectory = currentDirectory.Parent;
             }
 
+            var run = currentDirectory.SetDirSize();
             currentDirectory.printTree();
+            Console.WriteLine(currentDirectory.GetSizeDirThreshold(0));
+
+            var diff =  70000000 - currentDirectory.Size;
+            var sizeToDelete = 30000000 - diff;
+            List<int> folders = new();
+            Console.WriteLine(diff);
+
+            currentDirectory.GetSmallestDir(sizeToDelete, folders);
+            Console.WriteLine(folders.Min());
         }
     }
+
 }

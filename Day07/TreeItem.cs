@@ -30,32 +30,44 @@ namespace Day07
             }
         }
 
-        //public void setDirSize()
-        //{
-            
-        //    foreach (var child in Children)
-        //    {
-        //        child.printTree();
-        //    }
-        //}
-
-
-        public TreeItem findChild(string name)
+        public int GetSizeDirThreshold(int sum)
         {
-            foreach (var child in Children)
+            if (this.Size < 100000 && this.Children.Count > 0)
             {
-                if (child.Equals(name))
-                {
-                    return child;
-                }
-                else
-                {
-                    return child.findChild(name);
-                }
+                sum += this.Size;
             }
 
-            return null;
-            
+            foreach (var child in Children)
+            {
+                sum = child.GetSizeDirThreshold(sum);
+            }
+
+            return sum;
         }
+
+        public void GetSmallestDir(int sizeToDelete, List<int> folders)
+        {
+            if (this.Size > sizeToDelete && this.Children.Count > 0)
+            {
+                folders.Add(this.Size);
+            }
+
+            foreach (var child in Children)
+            {
+                child.GetSmallestDir(sizeToDelete, folders);
+            }
+        }
+
+        public int SetDirSize()
+        {
+            var size = this.Size;
+            foreach (var child in Children)
+            {
+                size += child.SetDirSize();
+            }
+            this.Size = size;
+            return size;
+        }
+
     }
 }
